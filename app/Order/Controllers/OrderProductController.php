@@ -1,0 +1,78 @@
+<?php
+
+namespace App\Order\Controllers;
+
+use App\Order\Models\Order;
+use App\Order\Services\OrderProductService;
+use App\Product\Requests\ProductAddRequest;
+use App\Shared\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
+use DB;
+
+class OrderProductController extends Controller
+{
+    protected OrderProductService $orderProductService;
+
+    public function __construct(OrderProductService $orderProductService)
+    {
+        $this->orderProductService = $orderProductService;
+    }
+
+    public function add(
+        ProductAddRequest $request,
+        Order $order,
+        int $productId,
+    ): JsonResponse {
+        DB::beginTransaction();
+        try {
+            $this->orderProductService->add(
+                $order,
+                $productId,
+                $request->validated(),
+            );
+            DB::commit();
+            return response()->json(['message' => 'Product added.'], 201);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['error' =>  $e->getMessage()]);
+        }
+    }
+
+    public function modify(
+        ProductAddRequest $request,
+        Order $order,
+        int $productId,
+    ): JsonResponse {
+        DB::beginTransaction();
+        try {
+            $this->orderProductService->modify(
+                $order,
+                $productId,
+                $request->validated(),
+            );
+            DB::commit();
+            return response()->json(['message' => 'Size modified.'], 201);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['error' =>  $e->getMessage()]);
+        }
+    }
+
+    public function remove(
+        Order $order,
+        int $productId
+    ): JsonResponse {
+        DB::beginTransaction();
+        try {
+            $this->orderProductService->remove(
+                $order,
+                $productId,
+            );
+            DB::commit();
+            return response()->json(['message' => 'Product removed.'], 201);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['error' =>  $e->getMessage()]);
+        }
+    }
+}
