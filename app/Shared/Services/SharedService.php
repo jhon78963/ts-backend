@@ -70,8 +70,10 @@ class SharedService
         ];
     }
 
-    private function searchFilter($query, string $search, array $columns): Builder
+    private function searchFilter($query, string $search, array|string $columns): Builder
     {
+        $columns = is_array($columns) ? $columns : [$columns];
+
         return $query->where(function ($q) use ($search, $columns) {
             foreach ($columns as $column) {
                 if (str_contains($column, '.')) {
