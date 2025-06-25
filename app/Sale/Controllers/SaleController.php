@@ -3,6 +3,7 @@
 namespace App\Sale\Controllers;
 
 use App\Product\Models\Product;
+use App\Product\Services\ProductService;
 use App\Sale\Enums\SaleStatus;
 use App\Sale\Models\Sale;
 use App\Sale\Requests\SaleCreateRequest;
@@ -21,13 +22,16 @@ class SaleController extends Controller
 {
     use HasAutocomplete;
     protected SaleService $saleService;
+    protected ProductService $productService;
     protected SharedService $sharedService;
 
     public function __construct(
         SaleService $saleService,
+        ProductService $productService,
         SharedService $sharedService,
     ) {
         $this->saleService = $saleService;
+        $this->productService = $productService;
         $this->sharedService = $sharedService;
     }
 

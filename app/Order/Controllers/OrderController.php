@@ -9,6 +9,7 @@ use App\Order\Requests\OrderUpdateRequest;
 use App\Order\Resources\OrderResource;
 use App\Order\Services\OrderService;
 use App\Product\Models\Product;
+use App\Product\Services\ProductService;
 use App\Shared\Controllers\Controller;
 use App\Shared\Requests\GetAllRequest;
 use App\Shared\Resources\GetAllCollection;
@@ -21,13 +22,16 @@ class OrderController extends Controller
 {
     use HasAutocomplete;
     protected OrderService $orderService;
+    protected ProductService $productService;
     protected SharedService $sharedService;
 
     public function __construct(
         OrderService $orderService,
+        ProductService $productService,
         SharedService $sharedService,
     ) {
         $this->orderService = $orderService;
+        $this->productService = $productService;
         $this->sharedService = $sharedService;
     }
 
