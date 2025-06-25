@@ -22,8 +22,6 @@ class Sale extends Model
     protected $fillable = [
         'id',
         'date',
-        'sub_total',
-        'total',
         'status',
         'customer_id',
     ];
@@ -51,6 +49,21 @@ class Sale extends Model
     public $timestamps = false;
 
     /**
+     * Get the calculated total for the order.
+     *
+     * This accessor sums the quantity multiplied by the price
+     * of each product in the order's pivot table.
+     *
+     * @return float
+     */
+    public function getTotalAttribute(): float
+    {
+        return $this->products->sum(
+            fn($product): float|int => $product->pivot->quantity * $product->pivot->price,
+        );
+    }
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
@@ -59,7 +72,7 @@ class Sale extends Model
     {
         return [
             'status' => SaleStatus::class,
-            'quantity' => 'integer',
+            'quantity' => 'int',
             'price' => 'float',
         ];
     }
@@ -78,11 +91,11 @@ class Sale extends Model
     }
 
     /**
-     * Get the supplier associated with the order.
+     * Get the customer associated with the order.
      *
      * @return BelongsTo
      */
-    public function supplier(): BelongsTo
+    public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);
     }

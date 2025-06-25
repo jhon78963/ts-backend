@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Image\Requests;
+namespace App\Sale\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ImageCreateRequest extends FormRequest
+class SaleUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,9 @@ class ImageCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'path' => 'required',
+            'date' => 'sometimes',
+            'status' => 'nullable|string',
+            'customerId' => 'sometimes|integer',
         ];
     }
 }

@@ -74,7 +74,7 @@ class Order extends Model
     {
         return [
             'status' => OrderStatus::class,
-            'quantity' => 'integer',
+            'quantity' => 'int',
             'price' => 'float',
         ];
     }

@@ -96,8 +96,8 @@ class CategoryController extends Controller
     {
         return $this->allAutocomplete(
             $request,
-            'Brand',
-            'Brand'
+            'Category',
+            'Category'
         );
     }
 

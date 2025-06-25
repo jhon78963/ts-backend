@@ -1,32 +1,32 @@
 <?php
 
-namespace App\Order\Controllers;
+namespace App\Sale\Controllers;
 
-use App\Order\Models\Order;
-use App\Order\Services\OrderProductService;
+use App\Sale\Models\Sale;
+use App\Sale\Services\SaleProductService;
 use App\Product\Requests\ProductAddRequest;
 use App\Shared\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use DB;
 
-class OrderProductController extends Controller
+class SaleProductController extends Controller
 {
-    protected OrderProductService $orderProductService;
+    protected SaleProductService $saleProductService;
 
-    public function __construct(OrderProductService $orderProductService)
+    public function __construct(SaleProductService $saleProductService)
     {
-        $this->orderProductService = $orderProductService;
+        $this->saleProductService = $saleProductService;
     }
 
     public function add(
         ProductAddRequest $request,
-        Order $order,
+        Sale $sale,
         int $productId,
     ): JsonResponse {
         DB::beginTransaction();
         try {
-            $this->orderProductService->add(
-                $order,
+            $this->saleProductService->add(
+                $sale,
                 $productId,
                 $request->validated(),
             );
@@ -40,18 +40,18 @@ class OrderProductController extends Controller
 
     public function modify(
         ProductAddRequest $request,
-        Order $order,
+        Sale $sale,
         int $productId,
     ): JsonResponse {
         DB::beginTransaction();
         try {
-            $this->orderProductService->modify(
-                $order,
+            $this->saleProductService->modify(
+                $sale,
                 $productId,
                 $request->validated(),
             );
             DB::commit();
-            return response()->json(['message' => 'Product modified.'], 201);
+            return response()->json(['message' => 'Prodct modified.'], 201);
         } catch (\Exception $e) {
             DB::rollback();
             return response()->json(['error' =>  $e->getMessage()]);
@@ -59,13 +59,13 @@ class OrderProductController extends Controller
     }
 
     public function remove(
-        Order $order,
+        Sale $sale,
         int $productId
     ): JsonResponse {
         DB::beginTransaction();
         try {
-            $this->orderProductService->remove(
-                $order,
+            $this->saleProductService->remove(
+                $sale,
                 $productId,
             );
             DB::commit();

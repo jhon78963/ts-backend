@@ -10,6 +10,7 @@ use App\Order\Models\Order;
 use App\Product\Enums\ProductStatus;
 use App\Sale\Models\Sale;
 use App\Store\Models\Store;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -73,6 +74,17 @@ class Product extends Model
     }
 
     /**
+     * Scope a query to only include products with stock greater than 0.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeAvailable($query): Builder
+    {
+        return $query->where('stock', '>', 0);
+    }
+
+    /**
      * Get the images associated with the product.
      *
      * @return BelongsToMany
@@ -94,7 +106,8 @@ class Product extends Model
      *
      * @return BelongsTo
      */
-    public function category(): BelongsTo {
+    public function category(): BelongsTo
+    {
         return $this->belongsTo(Category::class);
     }
 
@@ -103,7 +116,8 @@ class Product extends Model
      *
      * @return BelongsTo
      */
-    public function measurement(): BelongsTo {
+    public function measurement(): BelongsTo
+    {
         return $this->belongsTo(Measurement::class);
     }
 
@@ -112,7 +126,8 @@ class Product extends Model
      *
      * @return BelongsTo
      */
-    public function brand(): BelongsTo {
+    public function brand(): BelongsTo
+    {
         return $this->belongsTo(Brand::class);
     }
 

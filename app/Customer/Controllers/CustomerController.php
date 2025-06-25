@@ -11,12 +11,13 @@ use App\Shared\Controllers\Controller;
 use App\Shared\Requests\GetAllRequest;
 use App\Shared\Resources\GetAllCollection;
 use App\Shared\Services\SharedService;
+use App\Shared\Traits\HasAutocomplete;
 use Illuminate\Http\JsonResponse;
 use DB;
 
 class CustomerController extends Controller
 {
-
+    use HasAutocomplete;
     protected CustomerService $customerService;
     protected SharedService $sharedService;
 
@@ -60,6 +61,16 @@ class CustomerController extends Controller
         return response()->json(new CustomerResource($customerValidated));
     }
 
+    public function getAutocomplete(Customer $customer): JsonResponse
+    {
+        return $this->autocomplete(
+            $customer,
+            'customerService',
+            'customer',
+            'name',
+        );
+    }
+
     public function getAll(GetAllRequest $request): JsonResponse
     {
         $query = $this->sharedService->query(
@@ -74,6 +85,16 @@ class CustomerController extends Controller
             $query['total'],
             $query['pages'],
         ));
+    }
+
+    public function getAllAutocomplete(GetAllRequest $request): JsonResponse
+    {
+        return $this->allAutocomplete(
+            $request,
+            'Customer',
+            'Customer',
+            'name'
+        );
     }
 
     public function update(CustomerUpdateRequest $request, Customer $customer): JsonResponse

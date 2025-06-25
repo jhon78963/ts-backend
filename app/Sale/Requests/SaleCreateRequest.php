@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Order\Requests;
+namespace App\Sale\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class OrderAddRequest extends FormRequest
+class SaleCreateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,12 +22,9 @@ class OrderAddRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'date' => 'nullable',
-            'stock' => 'required|integer',
-            'subTotal' => 'required',
-            'total' => 'required',
-            'status' => 'nullable',
-            'supplierId' => 'required',
+            'date' => 'required',
+            'status' => 'nullable|string',
+            'customerId' => 'required|integer',
         ];
     }
 }

@@ -22,7 +22,7 @@ class SaleProductService
             $productId,
             [
                 'quantity' => $product['quantity'],
-                'price' => $product['stock'],
+                'price' => $product['price'],
             ]
         );
     }
@@ -35,7 +35,7 @@ class SaleProductService
             $productId,
             [
                 'quantity' => $product['quantity'],
-                'price' => $product['stock'],
+                'price' => $product['price'],
             ]
         );
     }
