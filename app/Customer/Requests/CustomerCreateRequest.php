@@ -22,9 +22,10 @@ class CustomerCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'dni' => 'required|string|min:8|max:8',
-            'name' => 'required|string',
-            'surname' => 'required|string',
+            'dni' => 'nullable|string|min:8|max:8',
+            'fullName' => 'required|string',
+            'name' => 'nullable|string',
+            'surname' => 'nullable|string',
             'phone' => 'nullable|string|min:9|max:9',
         ];
     }

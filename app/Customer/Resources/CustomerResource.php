@@ -19,6 +19,7 @@ class CustomerResource extends JsonResource
             'dni' => $this->dni,
             'name' => $this->name,
             'surname' => $this->surname,
+            'fullName' => $this->full_name,
             'phone' => $this->phone,
         ];
     }

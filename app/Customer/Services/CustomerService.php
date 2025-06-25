@@ -14,9 +14,9 @@ class CustomerService
         $this->modelService = $modelService;
     }
 
-    public function create(array $newCustomer): void
+    public function create(array $newCustomer): Customer
     {
-        $this->modelService->create(new Customer(), $newCustomer);
+        return $this->modelService->create(new Customer(), $newCustomer);
     }
 
     public function delete(Customer $customer): void

@@ -14,9 +14,9 @@ class SupplierService
         $this->modelService = $modelService;
     }
 
-    public function create(array $newSupplier): void
+    public function create(array $newSupplier): Supplier
     {
-        $this->modelService->create(new Supplier(), $newSupplier);
+        return $this->modelService->create(new Supplier(), $newSupplier);
     }
 
     public function delete(Supplier $supplier): void

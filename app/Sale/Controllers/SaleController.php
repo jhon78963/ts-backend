@@ -2,6 +2,7 @@
 
 namespace App\Sale\Controllers;
 
+use App\Product\Models\Product;
 use App\Sale\Enums\SaleStatus;
 use App\Sale\Models\Sale;
 use App\Sale\Requests\SaleCreateRequest;
@@ -12,11 +13,13 @@ use App\Shared\Controllers\Controller;
 use App\Shared\Requests\GetAllRequest;
 use App\Shared\Resources\GetAllCollection;
 use App\Shared\Services\SharedService;
+use App\Shared\Traits\HasAutocomplete;
 use Illuminate\Http\JsonResponse;
 use DB;
 
 class SaleController extends Controller
 {
+    use HasAutocomplete;
     protected SaleService $saleService;
     protected SharedService $sharedService;
 
@@ -66,13 +69,23 @@ class SaleController extends Controller
         return response()->json(new SaleResource($saleValidated));
     }
 
+    public function getAutocomplete(Product $product): JsonResponse
+    {
+        return $this->autocomplete(
+            $product,
+            'productService',
+            'Product',
+            'name',
+        );
+    }
+
     public function getAll(GetAllRequest $request): JsonResponse
     {
         $query = $this->sharedService->query(
             $request,
             'Sale',
             'Sale',
-            ['id', 'customer.name', 'customer.surname', 'date', 'status']
+            ['id', 'customer.full_name', 'date', 'status']
         );
 
         return response()->json(new GetAllCollection(
@@ -80,6 +93,17 @@ class SaleController extends Controller
             $query['total'],
             $query['pages'],
         ));
+    }
+
+    public function getAllAutocomplete(GetAllRequest $request): JsonResponse
+    {
+        return $this->allAutocomplete(
+            $request,
+            'Product',
+            'Product',
+            'name',
+            true,
+        );
     }
 
     public function update(SaleUpdateRequest $request, Sale $sale): JsonResponse

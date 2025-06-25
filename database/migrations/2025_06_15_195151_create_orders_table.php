@@ -23,7 +23,7 @@ return new class extends Migration {
             $table->foreign('deleter_user_id')->references('id')->on('users');
             $table->datetime('deletion_time')->nullable();
             $table->datetime('date')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->enum("status", ["PENDING", "RECEIVED", "CANCELLED"])->default("PENDING");
+            $table->enum("status", ["PENDING", "APPROVED", "RECEIVED", "PAID", "CANCELLED"])->default("PENDING");
             $table->unsignedBigInteger('supplier_id');
             $table->foreign('supplier_id')->references('id')->on('suppliers');
         });

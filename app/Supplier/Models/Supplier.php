@@ -2,9 +2,11 @@
 
 namespace App\Supplier\Models;
 
+use App\Order\Models\Order;
 use App\Supplier\Factories\SupplierFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Supplier extends Model
 {
@@ -48,4 +50,9 @@ class Supplier extends Model
      * @var bool
      */
     public $timestamps = false;
+
+
+    public function orders(): HasMany {
+        return $this->hasMany(Order::class);
+    }
 }

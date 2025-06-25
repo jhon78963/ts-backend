@@ -4,6 +4,7 @@ namespace App\Order\Controllers;
 
 use App\Order\Models\Order;
 use App\Order\Services\OrderProductService;
+use App\Product\Models\Product;
 use App\Product\Requests\ProductAddRequest;
 use App\Shared\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
@@ -21,13 +22,13 @@ class OrderProductController extends Controller
     public function add(
         ProductAddRequest $request,
         Order $order,
-        int $productId,
+        Product $product,
     ): JsonResponse {
         DB::beginTransaction();
         try {
             $this->orderProductService->add(
                 $order,
-                $productId,
+                $product,
                 $request->validated(),
             );
             DB::commit();
@@ -41,13 +42,13 @@ class OrderProductController extends Controller
     public function modify(
         ProductAddRequest $request,
         Order $order,
-        int $productId,
+        Product $product,
     ): JsonResponse {
         DB::beginTransaction();
         try {
             $this->orderProductService->modify(
                 $order,
-                $productId,
+                $product,
                 $request->validated(),
             );
             DB::commit();
@@ -60,13 +61,13 @@ class OrderProductController extends Controller
 
     public function remove(
         Order $order,
-        int $productId
+        Product $product,
     ): JsonResponse {
         DB::beginTransaction();
         try {
             $this->orderProductService->remove(
                 $order,
-                $productId,
+                $product->id,
             );
             DB::commit();
             return response()->json(['message' => 'Product removed.'], 201);

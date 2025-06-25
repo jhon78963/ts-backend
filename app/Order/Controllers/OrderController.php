@@ -8,15 +8,18 @@ use App\Order\Requests\OrderCreateRequest;
 use App\Order\Requests\OrderUpdateRequest;
 use App\Order\Resources\OrderResource;
 use App\Order\Services\OrderService;
+use App\Product\Models\Product;
 use App\Shared\Controllers\Controller;
 use App\Shared\Requests\GetAllRequest;
 use App\Shared\Resources\GetAllCollection;
 use App\Shared\Services\SharedService;
+use App\Shared\Traits\HasAutocomplete;
 use Illuminate\Http\JsonResponse;
 use DB;
 
 class OrderController extends Controller
 {
+    use HasAutocomplete;
     protected OrderService $orderService;
     protected SharedService $sharedService;
 
@@ -66,6 +69,16 @@ class OrderController extends Controller
         return response()->json(new OrderResource($orderValidated));
     }
 
+    public function getAutocomplete(Product $product): JsonResponse
+    {
+        return $this->autocomplete(
+            $product,
+            'productService',
+            'Product',
+            'name',
+        );
+    }
+
     public function getAll(GetAllRequest $request): JsonResponse
     {
         $query = $this->sharedService->query(
@@ -80,6 +93,17 @@ class OrderController extends Controller
             $query['total'],
             $query['pages'],
         ));
+    }
+
+    public function getAllAutocomplete(GetAllRequest $request): JsonResponse
+    {
+        return $this->allAutocomplete(
+            $request,
+            'Product',
+            'Product',
+            'name',
+            false
+        );
     }
 
     public function update(OrderUpdateRequest $request, Order $order): JsonResponse

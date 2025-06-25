@@ -3,8 +3,10 @@
 namespace App\Customer\Models;
 
 use App\Customer\Factories\CustomerFactory;
+use App\Sale\Models\Sale;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Customer extends Model
 {
@@ -23,6 +25,7 @@ class Customer extends Model
     protected $fillable = [
         'id',
         'dni',
+        'full_name',
         'name',
         'surname',
         'phone',
@@ -48,4 +51,8 @@ class Customer extends Model
      * @var bool
      */
     public $timestamps = false;
+
+    public function sales(): HasMany {
+        return $this->hasMany(Sale::class);
+    }
 }

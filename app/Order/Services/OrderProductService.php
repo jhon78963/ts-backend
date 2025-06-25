@@ -3,6 +3,7 @@
 namespace App\Order\Services;
 
 use App\Order\Models\Order;
+use App\Product\Models\Product;
 use App\Shared\Services\ModelService;
 
 class OrderProductService
@@ -14,28 +15,30 @@ class OrderProductService
         $this->modelService = $modelService;
     }
 
-    public function add(Order $order, int $productId, array $product): void
+    public function add(Order $order, Product $product, array $attributes): void
     {
         $this->modelService->attach(
             $order,
             'products',
-            $productId,
+            'product_id',
+            $product->id,
             [
-                'quantity' => $product['quantity'],
-                'price' => $product['price'],
+                'quantity' => $attributes['quantity'],
+                'price' => $attributes['price'],
             ]
         );
     }
 
-    public function modify(Order $order,  int $productId, array $product): void
+    public function modify(Order $order, Product $product, array $attributes): void
     {
         $this->modelService->attach(
             $order,
             'products',
-            $productId,
+            'product_id',
+            $product->id,
             [
-                'quantity' => $product['quantity'],
-                'price' => $product['price'],
+                'quantity' => $attributes['quantity'],
+                'price' => $attributes['price'],
             ]
         );
     }

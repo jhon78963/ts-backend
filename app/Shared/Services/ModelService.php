@@ -5,6 +5,7 @@ namespace App\Shared\Services;
 use App\User\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Support\Collection;
 use Auth;
 use DB;
@@ -14,6 +15,7 @@ class ModelService
     public function attach(
         Model $model,
         string $relation,
+        string $idName,
         int $id,
         ?array $attributes = [],
     ): void {

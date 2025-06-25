@@ -23,6 +23,7 @@ class CustomerUpdateRequest extends FormRequest
     {
         return [
             'dni' => 'sometimes|string|min:8|max:8',
+            'fullName' => 'sometimes|string',
             'name' => 'sometimes|string',
             'surname' => 'sometimes|string',
             'phone' => 'nullable|string|min:9|max:9',

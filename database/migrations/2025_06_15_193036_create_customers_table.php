@@ -24,7 +24,8 @@ return new class extends Migration
             $table->foreign('deleter_user_id')->references('id')->on('users');
             $table->datetime('deletion_time')->nullable();
             $table->string('dni', 8)->nullable();
-            $table->string('name');
+            $table->string('full_name');
+            $table->string('name')->nullable();
             $table->string('surname')->nullable();
             $table->string('phone')->nullable();
         });

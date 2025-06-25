@@ -41,7 +41,7 @@ class SharedService
         string $entityName,
         string $modelName,
         array|string|null $columnSearch = null,
-        array $computedColumns = []
+        bool $availabelData = false,
     ): array {
         $limit = $request->query('limit', $this->limit);
         $page = $request->query('page', $this->page);
@@ -50,6 +50,10 @@ class SharedService
         $modelClass = "App\\$entityName\\Models\\$modelName";
 
         $query = $modelClass::query()->where('is_deleted', false);
+
+        if ($availabelData) {
+            $query->available();
+        }
 
         if ($search) {
             $query = $this->searchFilter($query, $search, $columnSearch);

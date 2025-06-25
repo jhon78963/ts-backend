@@ -18,7 +18,7 @@ class SaleResource extends JsonResource
         return [
             'id' => $this->id,
             'date' => $this->date,
-            'customer' => $this->customer->name . ' ' . $this->customer->surname,
+            'customer' => $this->customer->full_name,
             'total' => $this->total,
             'status' => $this->status->label(),
             'customerId' => $this->customer_id,

@@ -71,16 +71,6 @@ class ProductController extends Controller
         return response()->json(new ProductResource($productValidated));
     }
 
-    public function getAutocomplete(Product $product): JsonResponse
-    {
-        return $this->autocomplete(
-            $product,
-            'productService',
-            'Product',
-            'name',
-        );
-    }
-
     public function getAll(GetAllRequest $request): JsonResponse
     {
         $query = $this->sharedService->query(
@@ -94,16 +84,6 @@ class ProductController extends Controller
             $query['total'],
             $query['pages'],
         ));
-    }
-
-    public function getAllAutocomplete(GetAllRequest $request): JsonResponse
-    {
-        return $this->allAutocomplete(
-            $request,
-            'Product',
-            'Product',
-            'name'
-        );
     }
 
     public function update(ProductUpdateRequest $request, Product $product): JsonResponse

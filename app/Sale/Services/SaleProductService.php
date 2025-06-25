@@ -2,8 +2,10 @@
 
 namespace App\Sale\Services;
 
+use App\Product\Models\Product;
 use App\Sale\Models\Sale;
 use App\Shared\Services\ModelService;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class SaleProductService
 {
@@ -14,38 +16,50 @@ class SaleProductService
         $this->modelService = $modelService;
     }
 
-    public function add(Sale $sale, int $productId, array $product): void
+    public function add(Sale $sale, Product $product, array $attributes): void
     {
         $this->modelService->attach(
             $sale,
             'products',
-            $productId,
+            'product_id',
+            $product->id,
             [
-                'quantity' => $product['quantity'],
-                'price' => $product['price'],
+                'quantity' => $attributes['quantity'],
+                'price' => $attributes['price'],
             ]
         );
+        $product->decreaseStock($attributes['quantity']);
     }
 
-    public function modify(Sale $sale,  int $productId, array $product): void
+    public function modify(Sale $sale, Product $product, array $attributes): void
     {
+        $pivot = $sale->products()->where('product_id', $product->id)->first()?->pivot;
+        if ($pivot) {
+            $product->increaseStock($pivot->quantity);
+        }
         $this->modelService->attach(
             $sale,
             'products',
-            $productId,
+            'product_id',
+            $product->id,
             [
-                'quantity' => $product['quantity'],
-                'price' => $product['price'],
+                'quantity' => $attributes['quantity'],
+                'price' => $attributes['price'],
             ]
         );
+        $product->decreaseStock($attributes['quantity']);
     }
 
-    public function remove(Sale $sale, int $productId): void
+    public function remove(Sale $sale, Product $product): void
     {
+        $pivot = $sale->products()->where('product_id', $product->id)->first()?->pivot;
+        if ($pivot) {
+            $product->increaseStock($pivot->quantity);
+        }
         $this->modelService->detach(
             $sale,
             'products',
-            $productId,
+            $product->id,
         );
     }
 }

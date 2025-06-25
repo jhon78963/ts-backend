@@ -32,9 +32,15 @@ class SupplierController extends Controller
         DB::beginTransaction();
         try {
             $newSupplier = $this->sharedService->convertCamelToSnake($request->validated());
-            $this->supplierService->create($newSupplier);
+            $supplier = $this->supplierService->create($newSupplier);
             DB::commit();
-            return response()->json(['message' => 'Supplier created.'], 201);
+            return response()->json([
+                'message' => 'Supplier created.',
+                'item' => [
+                    'id' => $supplier->id,
+                    'value' => $supplier->business_name
+                ],
+            ], 201);
         } catch (\Exception $e) {
             DB::rollback();
             return response()->json(['error' => $e->getMessage()]);

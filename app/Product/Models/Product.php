@@ -4,7 +4,6 @@ namespace App\Product\Models;
 
 use App\Brand\Models\Brand;
 use App\Category\Models\Category;
-use App\Image\Models\Image;
 use App\Measurement\Models\Measurement;
 use App\Order\Models\Order;
 use App\Product\Enums\ProductStatus;
@@ -15,6 +14,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Exception;
+use InvalidArgumentException;
 
 class Product extends Model
 {
@@ -74,6 +75,43 @@ class Product extends Model
     }
 
     /**
+     * Decrease the product stock.
+     *
+     * @param int $amount
+     * @throws InvalidArgumentException if the amount is invalid
+     * @throws Exception if the stock is insufficient
+     */
+    public function decreaseStock(int $amount): void
+    {
+        if ($amount <= 0) {
+            throw new InvalidArgumentException("La cantidad debe ser mayor a 0.");
+        }
+
+        if ($this->stock < $amount) {
+            throw new Exception("No hay suficiente stock para el producto: {$this->name}.");
+        }
+
+        $this->stock -= $amount;
+        $this->save();
+    }
+
+    /**
+     * Increase the product stock.
+     *
+     * @param int $amount
+     * @throws InvalidArgumentException if the amount is invalid
+     */
+    public function increaseStock(int $amount): void
+    {
+        if ($amount <= 0) {
+            throw new InvalidArgumentException("La cantidad debe ser mayor a 0.");
+        }
+
+        $this->stock += $amount;
+        $this->save();
+    }
+
+    /**
      * Scope a query to only include products with stock greater than 0.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
@@ -82,23 +120,6 @@ class Product extends Model
     public function scopeAvailable($query): Builder
     {
         return $query->where('stock', '>', 0);
-    }
-
-    /**
-     * Get the images associated with the product.
-     *
-     * @return BelongsToMany
-     */
-    public function images(): BelongsToMany
-    {
-        return $this->belongsToMany(
-            Image::class,
-            'product_image',
-            'product_id',
-            'path',
-            'id',
-            'id',
-        )->withPivot(['status']);
     }
 
     /**

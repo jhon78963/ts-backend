@@ -23,6 +23,7 @@ class CustomerFactory extends Factory
     {
         return [
             'dni' => $this->faker->unique()->numerify('########'),
+            'full_name' => $this->faker->firstName() . ' ' . $this->faker->lastName(),
             'name' => $this->faker->firstName(),
             'surname' => $this->faker->lastName(),
             'phone' => $this->faker->phoneNumber(),

@@ -32,9 +32,15 @@ class CustomerController extends Controller
         DB::beginTransaction();
         try {
             $newCustomer = $this->sharedService->convertCamelToSnake($request->validated());
-            $this->customerService->create($newCustomer);
+            $customer = $this->customerService->create($newCustomer);
             DB::commit();
-            return response()->json(['message' => 'Customer created.'], 201);
+            return response()->json([
+                'message' => 'Customer created.',
+                'item' => [
+                    'id' => $customer->id,
+                    'value' => $customer->full_name
+                ],
+            ], 201);
         } catch (\Exception $e) {
             DB::rollback();
             return response()->json(['error' =>  $e->getMessage()]);
@@ -77,7 +83,7 @@ class CustomerController extends Controller
             $request,
             'Customer',
             'Customer',
-            ['dni', 'name', 'surname', 'phone']
+            ['dni', 'full_name', 'phone']
         );
 
         return response()->json(new GetAllCollection(
@@ -93,7 +99,7 @@ class CustomerController extends Controller
             $request,
             'Customer',
             'Customer',
-            'name'
+            'full_name'
         );
     }
 
