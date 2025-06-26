@@ -67,7 +67,7 @@ class SaleProductController extends Controller
         try {
             $this->saleProductService->remove(
                 $sale,
-                $product->id,
+                $product,
             );
             DB::commit();
             return response()->json(['message' => 'Product removed.'], 201);

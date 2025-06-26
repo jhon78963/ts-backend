@@ -17,5 +17,5 @@ Route::controller(OrderController::class)->group(function (): void {
 Route::controller(OrderProductController::class)->group(function (): void {
     Route::post('/orders/{order}/product/{product}', 'add');
     Route::patch('/orders/{order}/product/{product}', 'modify');
-    Route::delete('/orders/{order}/product/{product}', 'remove');
+    Route::delete('/orders/{order}/product/{productId}', 'remove');
 });

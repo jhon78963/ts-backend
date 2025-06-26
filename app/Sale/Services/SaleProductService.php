@@ -50,7 +50,7 @@ class SaleProductService
         $product->decreaseStock($attributes['quantity']);
     }
 
-    public function remove(Sale $sale, Product $product): void
+    public function remove(Sale $sale, Product $product)
     {
         $pivot = $sale->products()->where('product_id', $product->id)->first()?->pivot;
         if ($pivot) {

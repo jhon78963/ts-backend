@@ -61,13 +61,13 @@ class OrderProductController extends Controller
 
     public function remove(
         Order $order,
-        Product $product,
+        int $productId,
     ): JsonResponse {
         DB::beginTransaction();
         try {
             $this->orderProductService->remove(
                 $order,
-                $product->id,
+                $productId,
             );
             DB::commit();
             return response()->json(['message' => 'Product removed.'], 201);
