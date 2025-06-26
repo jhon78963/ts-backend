@@ -7,6 +7,7 @@ use App\Category\Models\Category;
 use App\Measurement\Models\Measurement;
 use App\Order\Models\Order;
 use App\Product\Enums\ProductStatus;
+use App\Product\Factories\ProductFactory;
 use App\Sale\Models\Sale;
 use App\Store\Models\Store;
 use Illuminate\Database\Eloquent\Builder;
@@ -20,6 +21,11 @@ use InvalidArgumentException;
 class Product extends Model
 {
     use HasFactory;
+
+    protected static function newFactory(): ProductFactory
+    {
+        return ProductFactory::new();
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -108,6 +114,24 @@ class Product extends Model
         }
 
         $this->stock += $amount;
+        $this->save();
+    }
+
+    /**
+     * Update the product status based on current stock.
+     *
+     * @return void
+     */
+    public function updateStatusBasedOnStock(): void
+    {
+        if ($this->stock === 0) {
+            $this->status = 'OUT_OF_STOCK';
+        } elseif ($this->stock <= 10) {
+            $this->status = 'LIMITED_STOCK';
+        } else {
+            $this->status = 'AVAILABLE';
+        }
+
         $this->save();
     }
 

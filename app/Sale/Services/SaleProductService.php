@@ -5,7 +5,6 @@ namespace App\Sale\Services;
 use App\Product\Models\Product;
 use App\Sale\Models\Sale;
 use App\Shared\Services\ModelService;
-use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class SaleProductService
 {
@@ -29,6 +28,7 @@ class SaleProductService
             ]
         );
         $product->decreaseStock($attributes['quantity']);
+        $product->updateStatusBasedOnStock();
     }
 
     public function modify(Sale $sale, Product $product, array $attributes): void
@@ -48,6 +48,7 @@ class SaleProductService
             ]
         );
         $product->decreaseStock($attributes['quantity']);
+        $product->updateStatusBasedOnStock();
     }
 
     public function remove(Sale $sale, Product $product)
@@ -55,6 +56,7 @@ class SaleProductService
         $pivot = $sale->products()->where('product_id', $product->id)->first()?->pivot;
         if ($pivot) {
             $product->increaseStock($pivot->quantity);
+            $product->updateStatusBasedOnStock();
         }
         $this->modelService->detach(
             $sale,

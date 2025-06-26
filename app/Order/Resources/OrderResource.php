@@ -3,10 +3,10 @@
 namespace App\Order\Resources;
 
 use App\Shared\Resources\AutocompleteResource;
+use App\Shared\Resources\BaseResource;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 
-class OrderResource extends JsonResource
+class OrderResource extends BaseResource
 {
     /**
      * Transform the resource into an array.
@@ -17,7 +17,7 @@ class OrderResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'date' => $this->date,
+            'date' => $this->dateFormat($this->date),
             'businessName' => $this->supplier->business_name,
             'manager' => $this->supplier->manager,
             'total' => $this->total,
@@ -25,14 +25,5 @@ class OrderResource extends JsonResource
             'supplierId' => $this->supplier_id,
             'products' => $this->parseProductData($this->products),
         ];
-    }
-
-    private function parseProductData($products): array
-    {
-        return $products->map(fn($product) => [
-            'product' => new AutocompleteResource($product, 'name'),
-            'quantity' => $product->pivot->quantity ?? 0,
-            'price' => $product->pivot->price ?? 0,
-        ])->values()->all();
     }
 }
