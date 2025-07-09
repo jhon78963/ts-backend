@@ -89,7 +89,7 @@ class SaleController extends Controller
             $request,
             'Sale',
             'Sale',
-            ['id', 'customer.full_name', 'date', 'status']
+            ['id', 'customer.full_name']
         );
 
         return response()->json(new GetAllCollection(

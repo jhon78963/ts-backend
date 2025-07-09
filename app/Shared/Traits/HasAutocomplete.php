@@ -52,7 +52,7 @@ trait HasAutocomplete
         return response()->json(
             new AutocompleteResource(
                 $modelValidated,
-                $resourceColumn
+                $resourceColumn,
             )
         );
     }

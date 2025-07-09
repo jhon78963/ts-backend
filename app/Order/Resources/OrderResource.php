@@ -2,7 +2,6 @@
 
 namespace App\Order\Resources;
 
-use App\Shared\Resources\AutocompleteResource;
 use App\Shared\Resources\BaseResource;
 use Illuminate\Http\Request;
 

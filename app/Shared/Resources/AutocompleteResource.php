@@ -21,9 +21,18 @@ class AutocompleteResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return[
-            'id' => $this->id,
-            'value' => $this->{$this->column},
-        ];
+        if ($this->sale_price || $this->purchase_price) {
+            return [
+                'id' => $this->id,
+                'value' => $this->{$this->column},
+                'salePrice' => $this->sale_price,
+                'purchasePrice' => $this->purchase_price,
+            ];
+        } else {
+            return [
+                'id' => $this->id,
+                'value' => $this->{$this->column},
+            ];
+        }
     }
 }
