@@ -3,6 +3,7 @@
 namespace App\Category\Models;
 
 use App\Product\Models\Product;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -42,6 +43,32 @@ class Category extends Model
      */
     public $timestamps = false;
 
+    /**
+     * Interact with the category's description attribute.
+     *
+     * Al asignar un valor a "description", este mutator se asegura de:
+     * - Convertir todo el texto a minúsculas.
+     * - Poner en mayúscula la primera letra.
+     *
+     * Ejemplos:
+     *  - "LACTEOS"  => "Lacteos"
+     *  - "lacteos"  => "Lacteos"
+     *  - "LaCtEoS"  => "Lacteos"
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function description(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($value) => ucfirst(strtolower($value))
+        );
+    }
+
+    /**
+     * Get the products associated with the category.
+     *
+     * @return HasMany
+     */
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);

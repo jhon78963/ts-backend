@@ -3,6 +3,7 @@
 namespace App\Category\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CategoryUpdateRequest extends FormRequest
 {
@@ -22,7 +23,25 @@ class CategoryUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'description' => 'sometimes|string|max:25',
+            'description' => [
+                'sometimes',
+                'string',
+                'max:25',
+                // Valida unique en la tabla categories, ignorando el id actual
+                Rule::unique('categories', 'description')->ignore($this->route('category')->id),
+            ],
+        ];
+    }
+
+    /**
+     * Custom messages for validation errors.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'description.unique' => 'La descripción ya existe, debe ser única.',
         ];
     }
 }

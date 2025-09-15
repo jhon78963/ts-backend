@@ -26,7 +26,9 @@ return new class extends Migration {
             $table->float('sale_price')->nullable();
             $table->float('purchase_price')->nullable();
             $table->integer('stock')->nullable();
+            $table->integer('min_stock')->nullable();
             $table->string('image')->nullable();
+            $table->date('expiration_date')->nullable();
             $table->enum('status', ['AVAILABLE', 'LIMITED_STOCK', 'OUT_OF_STOCK', 'DISCONTINUED', 'PENDING'])->default('AVAILABLE');
             $table->unsignedBigInteger('category_id')->nullable();
             $table->foreign('category_id')->references('id')->on('categories');

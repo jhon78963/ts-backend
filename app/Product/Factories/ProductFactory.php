@@ -31,6 +31,8 @@ class ProductFactory extends Factory
             'sale_price' => $this->faker->randomFloat(2, 10, 500),
             'purchase_price' => $this->faker->randomFloat(2, 5, 400),
             'stock' => $stock,
+            'min_stock' => 10,
+            'expiration_date' => null,
             'status' => $this->getStatusBasedOnStock($stock),
             'category_id' => Category::inRandomOrder()->value('id'),
             'brand_id' => Brand::inRandomOrder()->value('id'),
